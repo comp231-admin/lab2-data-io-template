@@ -7,7 +7,7 @@ Classroom. Your lab submission should consist of four folders named
 `part1`, `part2`, etc.
 
 The purpose of this assignment is to gain familiarity with basic ARM
-assembly programming, use use arithmetic and logic instructions, and to
+assembly programming, use arithmetic and logic instructions, and to
 interact with some of the simple output devices on the board.
 
 # Part 1: A simple algorithm 
@@ -50,7 +50,7 @@ if the input is `0x103fe00f`, the result should be 9.
     will be used to test your function. The list should be terminated
     with a zero to signal the end of the list (i.e. `.word 0`).
 
-4.  In the `_start:` block, call the `ONES` program in a loop until it
+4.  In the `_start:` block, call the `ONES` function in a loop until it
     finds a zero. Track and store the longest sequence of ones into
     `r5`.
 
@@ -94,14 +94,14 @@ works correctly.
 In part 3, we could only see the results of our calculations by
 inspecting specific register values in the monitor program. To make our
 program a little more useful we will add some more functionality to show
-our results on the seven-segment displays that are on teh DE10 board.
-The board has six 7-segment displays. Each display is capable of shwoing
+our results on the seven-segment displays that are on the DE10 board.
+The board has six 7-segment displays. Each display is capable of showing
 a single hex digit from `0` to `F`. We will need two displays to show an
 8-bit value (i.e. `00` to `FF`).\
-You should copy over `part3.s` over to `part4.s` in a new folder and
+You should copy `part3.s` over to `part4.s` in a new folder and
 extend your program to display all three of the string counts on the
-seven segment displays. Show the longest string of 1's (`r8`) on
-` HEX1–HEX0`, the longest string of 0's (`r9`) on `HEX3–HEX2`, and the
+seven-segment displays. Show the longest string of 1's (`r8`) on
+`HEX1–HEX0`, the longest string of 0's (`r9`) on `HEX3–HEX2`, and the
 longest string of alternating bits (`r10`) on `HEX5–HEX4`.\
 A *seven segment display* is a simple output device that is shown in
 Fig. [2](#fig:ssd){reference-type="ref" reference="fig:ssd"}. The
@@ -109,9 +109,9 @@ display devices are *memory-mapped devices*, in that they have fixed
 memory addresses. Performing a store operation to the device address
 will turn on the lights that have ones in the corresponding bits, and
 turn off those that are zero. The four displays corresponding to
-` HEX3–HEX0` are controlled by writing a 32-bit value to memory address
-` 0xff200020`. Similarly, `HEX5–HEX4` are controlled by the lowest 16
-bits of the word at `0xff20030`. Only the seven bits for each display
+`HEX3–HEX0` are controlled by writing a 32-bit value to memory address
+`0xff200020`. Similarly, `HEX5–HEX4` are controlled by the lowest 16
+bits of the word at `0xff200030`. Only the seven bits for each display
 are connected to wires -- any unused bits are discarded.
 
 <figure id="fig:ssd" data-latex-placement="h">
@@ -133,12 +133,16 @@ Lastly, the code in Fig. [4](#fig:display){reference-type="ref"
 reference="fig:display"} provides some of the code that converts an
 8-bit input value into two 4-bit values and displays them on the display
 device.\
-A couple of important nodes about the `DISPLAY` function. First, this
-code uses the `DIVIDE` function from your lab 1. You should copy that
-function into your `part4.s` file. Second, note that there will be only
+A couple of important notes about the `DISPLAY` function. First, this
+code uses the `DIVIDE` function you wrote in Part 4 of Lab 1
+(`lab1-arm-intro/part4/part4.s`). You should copy that function into your
+`part4.s` file. Recall that your version takes the dividend in `r0` and the
+divisor in `r1`, and returns the quotient in `r1` and the remainder in `r0`.
+The code in the figure was written for the original divide-by-10 version, so
+you will need to add `mov r1, #10` before each `bl DIVIDE`. Second, note that there will be only
 a single *store* instruction to each of the display devices. You will
 need to construct a single 32-bit value that has the bit patterns for
-all of the displays you are using (4 for `HEX3–HEX0)` and 2 for
+all of the displays you are using (4 for `HEX3–HEX0` and 2 for
 `HEX5–HEX4`).
 
 <figure id="fig:bitcodes" data-latex-placement="h">
